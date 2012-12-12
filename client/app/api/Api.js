@@ -11,16 +11,16 @@ define([
 
 		baseUrl: '/api',
 
-		getAllAuthors: function(onDone, onFail) {
-			this._get('/authors', onDone, onFail);
+		getAllEvents: function(onDone, onFail) {
+			this._get('/events', onDone, onFail);
 		},
 
-		removeAuthor: function(authorId, onDone, onFail) {
-			this._delete('/authors/'+authorId, null, onDone, onFail);
+		removeEvent: function(eventId, onDone, onFail) {
+			this._delete('/events/'+eventId, null, onDone, onFail);
 		},
 
-		createAuthor: function(author, onDone, onFail) {
-			this._post('/authors', author, onDone, onFail);
+		createEvent: function(event, onDone, onFail) {
+			this._post('/events', event, onDone, onFail);
 		},
 
 		_ajax: function(type, resourceUrl, data, onDone, onFail, onAlways) {

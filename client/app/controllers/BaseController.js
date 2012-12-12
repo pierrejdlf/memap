@@ -10,7 +10,6 @@ define([
 	return em.ArrayController.extend({
 
 		resourceType: em.required(),
-
 		api: api,
 
 		load: function(json) {

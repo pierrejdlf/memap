@@ -1,42 +1,47 @@
-<div class="container">
-	<div class="row">
-		<div class="span6">
-			<h1>nodejs-emberjs-mongodb</h1>
-			<p>Proof of concept application.</p>
-			<h3>Dependencies</h3>
-			<ul>
-				<li><a href="http://nodejs.org/">Node.js</a> 0.6.x</li>
-				<li><a href="http://requirejs.org/">Require.js</a> 1.0.x</li>
-				<li><a href="http://expressjs.com/">Express.js</a> 3.0.x</li>
-				<li><a href="http://mongoosejs.com/">Mongoose.js</a> 2.5.x</li>
-				<li><a href="http://www.mongodb.org/">MongoDB</a> 2.0.x</li>
-				<li><a href="http://jquery.com/">jQuery</a> 1.7.2</li>
-				<li><a href="http://emberjs.com/">Ember.js</a> 0.9.8.1</li>
-				<li><a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap</a> 2.0.3</li>
-			</ul>
-		</div>
-		<div class="span6">
-			<h1>Authors <div class="btn btn-mini" {{action refresh}}>Refresh</div></h1>
-			<table class="table">
-				<thead>
-				<th>Id</th>
-				<th>Name</th>
-				</thead>
-				<tbody>
-					{{#each Em.App.authorsController}}
-					<tr>
-						<td>{{_id}}</td>
-						<td>{{name}}</td>
-						<td><div class="btn btn-mini" {{action removeAuthor}}>remove</div></td>
-					</tr>
-					{{/each}}
-				</tbody>
-			</table>
-
-			<div class="well form-inline">
-				{{view Ember.TextField valueBinding="newAuthor.name" id="authorName" placeholder="New author name"}}
-				<div class="btn" {{action createAuthor}}>Create new author</div>
-			</div>
-		</div>
-	</div>
+<div id="map"></div>
+<!--<svg id='themarker' class="marker" xmlns="http://www.w3.org/2000/svg" version="1.1">
+	<circle cx="5" cy="5" r="5" />
+</svg>-->
+<div class="overtable" id="cellevents">
+	<table class="table">
+		<thead>
+		<th>que</th>
+		<th>dia</th>
+		<th>hora</th>
+		<th>donde</th>
+		<th></th>
+		</thead>
+		<tbody>
+			<tr>
+				<td>
+				{{view Ember.TextField valueBinding="newEvent.link" class="input-tiny" id="evLink" placeholder="link"}}
+				{{view Ember.TextField valueBinding="newEvent.name" class="input-small" id="evName" placeholder="nombre del evento"}}
+				</td>
+				
+				<!-- date and time -->
+				<td><div class="input-append date" id="evDatePick" data-date="{{newEvent.date}}" data-date-format="mm-dd-yyyy">
+					<input type="text" size=34 class="input-tiny" value="{{newEvent.date}}" readonly>
+					<span class="add-on"><i class="icon-th"></i></span>
+				</div></td>
+				<td><div class="input-append bootstrap-timepicker-component">
+					<input type="text" size="5" class="input-tiny" value="{{newEvent.date}}" id="evTimePick" readonly>
+					<span class="add-on"><i class="icon-time"></i></span>
+				</div></td>
+				<td>{{view Ember.TextField valueBinding="newEvent.loc" class="input-medium" id="evLoc" placeholder="lugar"}}</td>
+				<td>
+					<div class="btn btn-small" {{action createEvent}}>Add</div>
+					<!--<div class="btn btn-small" {{action createVirtualEvent}}>Virtual</div>-->
+				</td>
+			</tr>
+			{{#each Em.App.eventsController}}
+			<tr class="evRow" id="row_{{unbound _id}}">
+				<td>{{formatLink link}} {{name}}</td>
+				<td class="graytd">{{formatDate date}}</td>
+				<td class="graytd">{{formatTime date}}</td>
+				<td>{{loc}}</td>
+				<td><div class="btn btn-mini" {{action removeEvent}}>X</div></td>
+			</tr>
+			{{/each}}
+		</tbody>
+	</table>
 </div>

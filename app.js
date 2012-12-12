@@ -13,16 +13,16 @@ requirejs.config({
 requirejs([
 	'express',
 	'mongoose',
-	'server/api/authors'
+	'server/api/events'
 ], function(
 	express,
 	mongoose,
-	api_authors
+	api_events
 ){
 	"use strict";
 
 	// connect to MongoDB
-	mongoose.connect('mongodb://localhost/example');
+	mongoose.connect('mongodb://localhost/myevents');
 
 	var app = express();
 
@@ -54,13 +54,13 @@ requirejs([
 	});
 
 	// ROUTES
-	app.get('/api/authors', api_authors.getAll);
-	app.del('/api/authors/:id', api_authors.remove);
-	app.post('/api/authors', api_authors.create);
+	app.get('/api/events', api_events.getAll);
+	app.del('/api/events/:id', api_events.remove);
+	app.post('/api/events', api_events.create);
 
 	// HTTP
-	var port = process.env.PORT || 3000;
+	var port = process.env.PORT || 8080;
 	app.listen(port);
 
-	console.log("Http server listening on port 3000");
+	console.log("Http server listening on port 8080");
 });

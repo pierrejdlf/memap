@@ -1,0 +1,74 @@
+/*
+html{height:100%;}
+body{height:100%;}
+container{height:100%;}
+row{height:100%;}
+*/
+.overtable {
+	z-index:100;
+	position:absolute;
+	right:10px;
+	top:10px;
+	padding:7px;
+	background: rgba(255,255,255,0.9);
+	border:gray;
+	-moz-border-radius: 7px; 
+	border-radius: 7px;
+}
+table td:nth-child(2) {
+	border:none;
+}
+td {
+	font-size:0.8em;	
+}
+td.graytd {
+	text-align:right;
+	padding-right:10px;
+	color:gray;
+	font-size:0.8em;
+}
+td:hover {
+	cursor:default;
+}
+input {
+	font-size:0.9em;
+}
+.input-tiny {
+	width:30px;
+}
+.row {
+	margin-top:30px;
+}
+/* style of custom svg markers */
+/*.marker circle {
+	stroke:black;
+	fill:white;
+}
+.marker circle:hover {
+	stroke:black;
+	fill:#DDD;
+}
+.marker {
+	position:absolute;
+	margin-top:-5px;
+	margin-left:-5px;
+	width:10px;
+	height:10px;
+	display:none;
+	pointer-events:all;
+}*/
+
+/* map */
+#mapcontainer {
+
+}
+#map {
+	/* not working ? */
+	/*-moz-border-radius: 8px; 
+	border-radius: 8px;*/
+	/*width:100%;
+	height:100%;*/
+	/*margin:0;
+	padding:0;*/
+	z-index:10;
+}

@@ -3,3 +3,4 @@ test/db/data/
 node_modules/
 nbproject/
 client-build/
+nohup.out

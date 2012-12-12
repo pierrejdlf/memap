@@ -4,18 +4,60 @@
 		<meta charset="UTF-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-		<title>Node.js + Require.js + Express.js + Ember.js + Mongoose.js + MongoDB + Twitter Bootstrap</title>
+		<title>memap</title>
 
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 		<link rel="shortcut icon" href="img/favicon.ico">
 
 		<link rel="stylesheet" type="text/css" href="css/main.css">
+		<link rel="stylesheet" type="text/css" href="css/mapbox.css">
+		<link rel="stylesheet" type="text/css" href="css/datepicker.css">
+		<link rel="stylesheet" type="text/css" href="css/timepicker.css">
+		
+		<!-- 
+		<link rel="stylesheet" href="css/leaflet.css"/>
+		<link rel="stylesheet" href="css/leaf.css"/>
+		-->
+		
+		<!--[if lte IE 8]>
+		<link rel="stylesheet" href="css/leaflet.ie.css" />
+		<![endif]-->
 
 		<!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
-
+		<script type="text/javascript" src="http://maps.google.com/maps/api/js?key=AIzaSyA-BiwVH06gU2355HCmhHrFIaqV4zW87bE&sensor=false"></script>
 		<script data-main="main" src="lib/requirejs/require.js"></script>
 	</head>
 <body>
+
+<div id="fb-root"></div>
+<script>
+  window.fbAsyncInit = function() {
+    // init the FB JS SDK
+    FB.init({
+      appId      : 309212379187447, // App ID from the App Dashboard
+      channelUrl : '82.66.96.183:8080', // Channel File for x-domain communication
+      status     : true, // check the login status upon init?
+      cookie     : true, // set sessions cookies to allow your server to access the session?
+      xfbml      : true  // parse XFBML tags on this page?
+    });
+
+    // Additional initialization code such as adding Event Listeners goes here
+
+  };
+
+  // Load the SDK's source Asynchronously
+  // Note that the debug version is being actively developed and might 
+  // contain some type checks that are overly strict. 
+  // Please report such bugs using the bugs tool.
+  (function(d, debug){
+     var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement('script'); js.id = id; js.async = true;
+     js.src = "//connect.facebook.net/en_US/all" + (debug ? "/debug" : "") + ".js";
+     ref.parentNode.insertBefore(js, ref);
+   }(document, /*debug*/ false));
+</script>
+
 </body>
 </html>
