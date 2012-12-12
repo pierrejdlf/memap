@@ -15,8 +15,11 @@ row{height:100%;}
 	-moz-border-radius: 7px; 
 	border-radius: 7px;
 }
-table td:nth-child(2) {
+.overtable table td:nth-child(2) {
 	border:none;
+}
+.overtable table {
+	margin-bottom:2px;
 }
 td {
 	font-size:0.8em;	
@@ -28,7 +31,7 @@ td.graytd {
 	font-size:0.8em;
 }
 .table tbody tr.evRow:hover td {
-	cursor:default;
+	cursor:pointer;
 	background:#E1EAF6;
 }
 input {

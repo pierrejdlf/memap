@@ -118,7 +118,7 @@ define([
 					MM.addEvent(elmark, 'mouseover', function(e) {
 						elmark.src = "http://a.tiles.mapbox.com/v3/marker/pin-s-fire-station+3399CC.png";
 						var oId = elmark.id.split("_")[1];
-						console.log('over:'+oId);
+						//console.log('over:'+oId);
 						$('#row_'+oId).css("background","#E1EAF6");
 					});
 					MM.addEvent(elmark, 'mouseout', function(e) {
@@ -162,12 +162,14 @@ define([
 				//console.log("attaching id="+evId);
 				var elng = parseFloat(el.find("#evLng").html());
 				var elat = parseFloat(el.find("#evLat").html());
-				el.mouseover(function() {	
-					var mark = $('#mark_'+evId);
+				el.on('click',function() {
 					var zl = curThis.m.getZoom();
 					//console.log("... centering (z:"+zl+") to: "+evId+" = "+elat+","+elng);
 					var mlng = elng + 0.2785/(zl*2.6);
-					curThis.m.center({lat:elat,lon:mlng},true);
+					curThis.m.center({lat:elat,lon:mlng},true);				
+				});
+				el.mouseover(function() {	
+					var mark = $('#mark_'+evId);
 					mark.attr('src','http://a.tiles.mapbox.com/v3/marker/pin-s-fire-station+3399CC.png');
 					mark.mouseover();
 				});
@@ -361,7 +363,7 @@ define([
 			
 			var curThis = this;
 			
-			var foundpoint = this.theMap.geoCodeString(eventLoc+", Medellin, Colombia", function(locString,foundpoint) {
+			var foundpoint = this.geoCodeString(eventLoc+", Medellin, Colombia", function(locString,foundpoint) {
 				console.log("LOCATED POINT:"+foundpoint);
 				
 				var geocodedFoundPoint = {
@@ -372,7 +374,7 @@ define([
 						"city":locString
 					}
 				};
-				curThis.theMap.addPoint(geocodedFoundPoint);
+				curThis.addPoint(geocodedFoundPoint);
 				
 				eventsController.api.createEvent({
 					name: 	eventName,
@@ -386,7 +388,8 @@ define([
 					curThis.newEvent.set('_id', data.id);
 					eventsController.pushObject(curThis.newEvent);
 					curThis.set('newEvent', Event.create());
-					this.refresh();
+					eventsController.getAll();
+					//curThis.refresh();
 				}.bind(curThis), function(err) {
 					console.log('error', err);
 				}.bind(curThis));
