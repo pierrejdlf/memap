@@ -39,6 +39,8 @@
 				<td class="graytd">{{formatDate date}}</td>
 				<td class="graytd">{{formatTime date}}</td>
 				<td>{{loc}}</td>
+				<td id="evLng" style="display:none">{{unbound lng}}</td>
+				<td id="evLat" style="display:none">{{unbound lat}}</td>
 				<td><div class="btn btn-mini" {{action removeEvent}}>X</div></td>
 			</tr>
 			{{/each}}

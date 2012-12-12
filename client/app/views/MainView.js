@@ -5,93 +5,77 @@ define([
 	'lib/mapbox/mapbox',
 	//'lib/leaflet/leaflet',
 	//'lib/d3/d3.v2',
-	'app/model/Map',
 	'app/model/Event',
 	'app/controllers/eventsController',
-	'app/controllers/mapController',
 	'lib/requirejs/plugins/text!app/templates/Main.handlebars'
 ],function(
 	em,
 	mapb,
 	//leaflet,
 	//d3v2,
-	Map,
 	Event,
 	eventsController,
-	map,
 	mainTemplateSource
 ){
 	"use strict";
 	
 	return em.View.extend({
+	
 		template: em.Handlebars.compile(mainTemplateSource),
 		newEvent: null,
-		theMap: null,
-		showPast: eventsController.showPast,
+		m: null,
+		features: null,
+		geocoder: null,
+		currentGeoCodingQuery: null,
 		
 		init: function(event) {
 			this._super();
-			this.theMap = Map.create();
 			this.newEvent = Event.create();
-		},
-		
-		didInsertElement: function(){
-			console.log("DOM READY, INITING THINGS");
-			
-			// init date/time pickers
-			$('#evDatePick').datepicker('setValue', Date());
-			$('#evTimePick').timepicker({'defaultTime':'current'});
-			
-			this.refresh();
-			
-			//this.theMap.geoCodeString('Casa tres patios, Medellin, Colombia');
-			//this.theMap.geoCodeString('Terminal transporte, medellin');
-		},
-		
-		initMap: function(){
-			// adjust map size
-			var H = $(window).height()*80/100;
-			var W = $(window).width()/3;
-			console.log('size'+H+" / "+W);
-			$("#cellmap").height(H);
-			$("#cellmap").width(W);
-			$("#mapcontainer").height(H);
-			$("#mapcontainer").width(W);
-			$("#map").height(H);
-			$("#map").width(W);
-			
-			// build map and move to current pos
-			this.theMap.initMe();
-			this.theMap.getMyPosition();
-		},
-		
-/*
-		fireMouse: function(elem,typ) {
-			if( document.createEvent ) {
-				var evObj = document.createEvent('MouseEvents');
-				evObj.initEvent( 'mouse'+typ, true, false );
-				elem.dispatchEvent(evObj);
-			} else if( document.createEventObject ) {
-				elem.fireEvent('onmouse'+typ);
-			}
-		},
-*/
-					
-		refresh: function() {
-			console.log("... Refreshing, showpast="+this.showPast);
 			
 			// fetch all objects to display list loop of events
 			eventsController.getAll();
 			
+		},
+		
+		didInsertElement: function(){
+			console.log("... trying to init");
+			
+			// init map and got to current pos if not done
+			if(this.m==null) {
+				console.log("... make map object and find current position");
+				this.initMap();
+				this.getMyPosition();
+			
+				// init date/time pickers
+				$('#evDatePick').datepicker('setValue', Date());
+				$('#evTimePick').timepicker({'defaultTime':'current'});
+				
+				this.refresh();
+			}
+			
+			if (this.$().find(".evRow").length > 0) {
+				console.log("... rows were found !");
+     			this.setRolloverRows(); // my childViews are inserted
+			} else {
+				Ember.run.next(this, function() {
+				this.didInsertElement();
+				});
+			}
+		},
+		
+		afterRender: function(){
+			//console.log("... finished rendering");
+		},
+					
+		refresh: function() {
+			console.log("... fetching events from controller");
+			
 			var curThis = this;
 			
-			// we also fetch [lng,lat] to create points in the map
+			// fetch event objects
 			eventsController.api.getAllEvents(function(json) {
 				var json = eventsController.sortFilterMe(json);
-				// init mapbox object
-				curThis.initMap();
-				
-				var mobj = curThis.theMap;
+				//var mobj = curThis.m;
 				
 				// building features
 				json.forEach(function(elem) {
@@ -107,35 +91,19 @@ define([
 							'marker-size':	'small',
           					'marker-symbol': 'fire-station',
 						}};
-					console.log("link:"+elem['link']);
+					//console.log("link:"+elem['link']);
 					//console.log("NEW FEATURE:"+evFeature['geometry']['coordinates']);
-					mobj.addPoint(evFeature);
-					
-					console.log("... Attaching rollover table to recentering");
-					// for each, attach mouse event to recenter map on geoloc
-					var therow = $('#row_'+elem['_id']);
-					therow.mouseover(function() {
-						console.log("centering to:"+ elem['lat']+"/"+elem['lng']);
-						var zl = mobj.m.getZoom()
-						mobj.m.center({lat:elem['lat'], lon:elem['lng'] + 0.2785/(zl*2.6)},true);
-						$('#mark_'+elem['_id']).attr('src','http://a.tiles.mapbox.com/v3/marker/pin-s-fire-station+3399CC.png');
-						//curThis.fireMouse($('#mark_'+elem['_id']),'over');
-					});
-					therow.mouseout(function() {
-						$('#mark_'+elem['_id']).attr('src','http://a.tiles.mapbox.com/v3/marker/pin-s-fire-station+000.png');
-						//curThis.fireMouse($('#mark_'+elem['_id']),'out');
-					});
+					curThis.addPoint(evFeature);
 				});
 				
-			
-				console.log("... All events received");	
+				console.log("... all features updated from events");	
 								
 				// add map layer with all points
-				var markerLayerPoints = mapbox.markers.layer().features(mobj.features);
-				mobj.m.addLayer(markerLayerPoints);
+				var markerLayerPoints = mapbox.markers.layer().features(curThis.features);
+				curThis.m.addLayer(markerLayerPoints);
 				
 				// custom markers interaction + tooltip
-				markerLayerPoints.factory( function(fo) {
+				markerLayerPoints.factory(function(fo) {
 					// Create a marker using the simplestyle factory (it's a DOM img elem !)
 					var elmark = mapbox.markers.simplestyle_factory(fo);
 					elmark.id = "mark_"+fo.properties.id;
@@ -151,7 +119,7 @@ define([
 						elmark.src = "http://a.tiles.mapbox.com/v3/marker/pin-s-fire-station+3399CC.png";
 						var oId = elmark.id.split("_")[1];
 						console.log('over:'+oId);
-						$('#row_'+oId).css("background","#f5f5f5");
+						$('#row_'+oId).css("background","#E1EAF6");
 					});
 					MM.addEvent(elmark, 'mouseout', function(e) {
 						elmark.src = "http://a.tiles.mapbox.com/v3/marker/pin-s-fire-station+000.png";
@@ -162,13 +130,13 @@ define([
 					
 					// Add function that centers marker on click
 					MM.addEvent(elmark, 'click', function(e) {
-						var zl = mobj.m.getZoom();
+						var zl = curThis.m.getZoom();
 						console.log("current zoom="+zl);
-						mobj.m.ease.location({
+						curThis.m.ease.location({
 							lat: fo.geometry.coordinates[1],
 							lon: fo.geometry.coordinates[0]+0.2785/(zl*2.6)
-						}).zoom(mobj.m.zoom()).optimal();
-						//mobj.m.panBy(-300, 0);
+						}).zoom(curThis.m.zoom()).optimal();
+						//curThis.m.panBy(-300, 0);
 					}); 
 					return elmark;
 				});
@@ -180,10 +148,115 @@ define([
 					var o = '<div id="">'+p.loc+'</div>';
 					return o;
 				});
-					
+				console.log("... all markers set up with rollover actions");
 			});
 		},
-
+		
+		setRolloverRows: function() {
+			var curThis = this;
+			console.log("... attaching rollover table to recentering");
+			// for each, attach mouse event to recenter map on geoloc
+			$(".evRow").each(function(i,ob) {
+				var el = $(ob);
+				var evId = ob.id.split("_")[1];
+				//console.log("attaching id="+evId);
+				var elng = parseFloat(el.find("#evLng").html());
+				var elat = parseFloat(el.find("#evLat").html());
+				el.mouseover(function() {	
+					var mark = $('#mark_'+evId);
+					var zl = curThis.m.getZoom();
+					//console.log("... centering (z:"+zl+") to: "+evId+" = "+elat+","+elng);
+					var mlng = elng + 0.2785/(zl*2.6);
+					curThis.m.center({lat:elat,lon:mlng},true);
+					mark.attr('src','http://a.tiles.mapbox.com/v3/marker/pin-s-fire-station+3399CC.png');
+					mark.mouseover();
+				});
+				el.mouseout(function() {
+					var mark = $('#mark_'+evId);
+					mark.attr('src','http://a.tiles.mapbox.com/v3/marker/pin-s-fire-station+000.png');
+					mark.mouseout();
+				});
+			});
+		},
+					
+		initMap: function() {	
+			this.m = mapbox.map('map').zoom(14).center({lat:6.240903,lon:-75.570196});
+			var backLayer = mapbox.layer().id('minut.map-qgm940aa');
+			this.m.addLayer(backLayer);
+			var dimensions = this.m.dimensions;
+			this.m.parent.className += ' map-fullscreen-map';
+			document.body.className += ' map-fullscreen-view';
+			this.m.dimensions = { x: this.m.parent.offsetWidth, y: this.m.parent.offsetHeight };
+			this.m.draw();
+			
+			// define sample points
+			this.features = [];
+			
+			console.log("... map build !");
+		},
+		
+		addPoint: function(newFeature) {
+			this.features.push(newFeature);
+		},
+		
+		geoCodeString: function(adressString,successfunc) {
+			this.geocoder = new google.maps.Geocoder();
+			this.currentGeoCodingQuery = adressString;
+			console.log("geocoding search launch for: " + this.currentGeoCodingQuery);
+			var curWantedStr = adressString;
+			this.geocoder.geocode( {'address': adressString} , function(results,status) {
+				if(status == google.maps.GeocoderStatus.OK) {
+					var coordFound = [results[0].geometry.location.lng(),results[0].geometry.location.lat()];
+					console.log("... geocodingSuccess for: "+curWantedStr);
+					console.log("... geocodingSuccess is: "+coordFound[0]+"|"+coordFound[1]);
+					successfunc(curWantedStr,coordFound);
+				  } else {
+					console.log("Geocode was not successful for the following reason: " + status);
+				  }		
+			});
+		},
+		
+		getMyPosition: function() {			
+			// Create an empty markers layer, for my current position
+			var markerLayerMyPos = mapbox.markers.layer();
+			this.m.addLayer(markerLayerMyPos);
+			var interaction = mapbox.markers.interaction(markerLayerMyPos);
+			interaction.formatter(function(feature) {
+				return "aquí estoy !";
+			});
+			
+			var curThis = this;
+			// fetching my current position (from browser)			
+			navigator.geolocation.getCurrentPosition(
+				function(position) {
+					// Once we've got a position, zoom and center the map
+					// on it, add ad a single feature
+					console.log("... current location found!");
+					var zl = curThis.m.getZoom()
+					curThis.m.center({
+						lat: position.coords.latitude,
+						lon: position.coords.longitude + 0.2785/(zl*2.6)
+					},true);
+					markerLayerMyPos.add_feature({
+						geometry: {
+							coordinates: [
+								position.coords.longitude,
+								position.coords.latitude]
+							},
+							properties: {
+								'marker-color': '#FF9933',
+								'marker-symbol': 'swimming',
+								'marker-size':'medium',
+							}
+					});
+				},
+				function(err) {
+					// If the user chooses not to allow their location
+					console.log("you refused to show your location!");
+				}
+			);
+		},
+		
 		removeEvent: function(event) {
 			var eventId = event.context.get('_id');
 

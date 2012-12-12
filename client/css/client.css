@@ -27,8 +27,9 @@ td.graytd {
 	color:gray;
 	font-size:0.8em;
 }
-td:hover {
+.table tbody tr.evRow:hover td {
 	cursor:default;
+	background:#E1EAF6;
 }
 input {
 	font-size:0.9em;

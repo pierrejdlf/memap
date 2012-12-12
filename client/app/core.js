@@ -13,7 +13,11 @@ define([
 		mainView: MainView.create({}),
 		eventsController: eventsController
 	});
-
+	
+	em.App.ready = function() {
+		console.log("... app everything ready");
+	},
+		
 	// custom formatters to render in template
 	// cd formats @ http://code.google.com/p/datejs/wiki/FormatSpecifiers
 	em.Handlebars.registerHelper('formatDate', function(path, options) {
