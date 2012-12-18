@@ -1,5 +1,5 @@
 {
-  "name": "nodejs-emberjs-mongodb",
+  "name": "memap",
   "version": "0.0.2",
   "engines": {
     "node": "0.8.x",
@@ -9,7 +9,7 @@
     "start": "NODE_ENV=development node app"
   },
   "dependencies": {
-    "express": "2.1.0",
+    "express": "3.0.x",
     "mongoose": "2.5.x",
     "requirejs": "1.0.x"
   }
