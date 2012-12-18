@@ -49,7 +49,7 @@ requirejs([
 	app.configure('production', function(){
 		// build client if directory client-build not found
 		var path = require('path');
-		if (!fs.existsSync("client-build")) {
+		if (!path.existsSync("client-build")) {
 			require('./build');
 		}
 		app.use(express['static'](__dirname + '/client-build'));
