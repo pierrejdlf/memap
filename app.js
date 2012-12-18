@@ -30,13 +30,12 @@ requirejs([
 		app.use(express.favicon());
 		app.use(express.bodyParser());
 		app.use(express.methodOverride());
-		app.use(express['static'](__dirname + '/client'));
 		app.use(app.router);
 	});
 
 	app.configure('development', function(){
 		app.use(express.logger('dev'));
-		app.use(express['static'](__dirname + '/client'));
+		app.use(express['static'](__dirname + '/public'));
 		app.use(express.errorHandler({
 			dumpExceptions: true, 
 			showStack: true
@@ -44,13 +43,11 @@ requirejs([
 	});
 
 	app.configure('production', function(){
-		
 		// build client if directory client-build not found
 		var path = require('path');
 		if (!fs.existsSync("client-build")) {
 			require('./build');
 		}
-		
 		app.use(express['static'](__dirname + '/client-build'));
 	});
 
