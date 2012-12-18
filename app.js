@@ -46,7 +46,7 @@ requirejs([
 		
 		// build client if directory client-build not found
 		var path = require('path');
-		if (!path.existsSync("client-build")) {
+		if (!fs.existsSync("client-build")) {
 			require('./build');
 		}
 		
@@ -59,8 +59,8 @@ requirejs([
 	app.post('/api/events', api_events.create);
 
 	// HTTP
-	var port = process.env.PORT || 80;
+	var port = process.env.PORT || 8080;
 	app.listen(port);
 
-	console.log("Http server listening on port 80");
+	//console.log("Http server listening on port 80");
 });
