@@ -22,7 +22,7 @@ requirejs([
 	"use strict";
 
 	// connect to MongoDB
-	mgUri = process.env.MONGOLAB_URI || process.env.MONGOHQ_URL || 'mongodb://localhost/myevents';
+	var mgUri = process.env.MONGOLAB_URI || process.env.MONGOHQ_URL || 'mongodb://localhost/myevents';
 	mongoose.connect(mgUri);
 	
 	var app = express();
