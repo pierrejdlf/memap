@@ -31,15 +31,12 @@ requirejs([
 		app.use(express.favicon());
 		app.use(express.bodyParser());
 		app.use(express.methodOverride());
-		app.use(express.static(__dirname + '/public'));
 		app.use(app.router);
 	});
 
 	app.configure('development', function(){
 		app.use(express.logger('dev'));
-		//app.use(express.static(__dirname + '/public'));
-		//console.log("DIRNAME:"+__dirname);
-		//app.use(express['static'](__dirname + '/public/'));
+		app.use(express['static'](__dirname + '/public/'));
 		app.use(express.errorHandler({
 			dumpExceptions: true, 
 			showStack: true
