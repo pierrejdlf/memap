@@ -36,7 +36,7 @@ requirejs([
 
 	app.configure('development', function(){
 		app.use(express.logger('dev'));
-		app.use(express['static'](__dirname + '/public/'));
+		app.use(express['static'](__dirname + '/public'));
 		app.use(express.errorHandler({
 			dumpExceptions: true, 
 			showStack: true
