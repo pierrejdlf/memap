@@ -30,6 +30,7 @@ requirejs([
 		app.use(express.favicon());
 		app.use(express.bodyParser());
 		app.use(express.methodOverride());
+		app.use(express['static'](__dirname + '/client'));
 		app.use(app.router);
 	});
 
