@@ -59,8 +59,8 @@ requirejs([
 	app.post('/api/events', api_events.create);
 
 	// HTTP
-	var port = process.env.PORT || 8080;
+	var port = process.env.PORT || 80;
 	app.listen(port);
 
-	console.log("Http server listening on port 8080");
+	console.log("Http server listening on port 80");
 });
