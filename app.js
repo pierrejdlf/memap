@@ -35,7 +35,8 @@ requirejs([
 
 	app.configure('development', function(){
 		app.use(express.logger('dev'));
-		app.use(express['static'](__dirname + '/public/'));
+		app.use(express.static(__dirname + '/public'));
+		//app.use(express['static'](__dirname + '/public/'));
 		app.use(express.errorHandler({
 			dumpExceptions: true, 
 			showStack: true
@@ -55,6 +56,13 @@ requirejs([
 	app.get('/api/events', api_events.getAll);
 	app.del('/api/events/:id', api_events.remove);
 	app.post('/api/events', api_events.create);
+
+	app.get('/', function(req, res){
+		//Apache-like static index.html (public/index.html)
+		res.redirect("/index.html");
+		//Or render from view
+		//res.render("index.html")
+	});
 
 	// HTTP
 	var port = process.env.PORT || 8080;
