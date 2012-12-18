@@ -3,7 +3,7 @@
   "version": "0.0.2",
   "engines": {
     "node": "0.8.x",
-    "npm":  "1.1.68"
+    "npm":  "1.1.65"
   }, 
   "scripts": {
     "start": "NODE_ENV=development node app"
