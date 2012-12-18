@@ -8,7 +8,7 @@ var requirejs = require('requirejs'),
 //Set up basic config, include config that is
 //common to all the requirejs.optimize() calls.
 var baseConfig = {
-	baseUrl: "client",
+	baseUrl: "public",
 	outputDir: 'client-build',
 	optimize: "uglify",
 //	optimize: "none", // For debugging built versions
