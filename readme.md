@@ -1,14 +1,16 @@
-quick & dirty tryout forked from https://github.com/abelaska/nodejs-emberjs-mongodb
+(quick & dirty tryout of a) fullscreen mapbox map with mongodb list + markers of events
 
-please do not try this at home, it's completely unpackaged at the moment
+forked from https://github.com/abelaska/nodejs-emberjs-mongodb
+
+please do not try this at home, you'll die.
+
+you can see it at http://mapmedellin.herokuapp.com/
 
 ### starting locally
-
-	nohup mongod &
 	
 	npm install
 	
-	nohup npm start &
+	node app
 
 ### Build and run production version
 
