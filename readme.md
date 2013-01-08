@@ -4,8 +4,6 @@ forked from https://github.com/abelaska/nodejs-emberjs-mongodb
 
 please do not try this at home, you'll die.
 
-you can see it at http://mapmedellin.herokuapp.com/
-
 ### starting locally
 	
 	npm install
