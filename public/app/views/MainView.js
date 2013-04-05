@@ -235,7 +235,7 @@ define([
 					var zl = curThis.m.getZoom()
 					curThis.m.center({
 						lat: position.coords.latitude,
-						lon: position.coords.longitude + 0.2785/(zl*2.6)
+						lon: position.coords.longitude + 0.2785/(zl*2.6) // translate poco poco to left
 					},true);
 					markerLayerMyPos.add_feature({
 						geometry: {
@@ -361,7 +361,7 @@ define([
 			
 			var curThis = this;
 			
-			var foundpoint = this.geoCodeString(eventLoc+", Medellin, Colombia", function(locString,foundpoint) {
+			var foundpoint = this.geoCodeString(eventLoc+", France", function(locString,foundpoint) {
 				console.log("LOCATED POINT:"+foundpoint);
 				
 				var geocodedFoundPoint = {
