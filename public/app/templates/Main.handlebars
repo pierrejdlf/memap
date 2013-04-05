@@ -15,7 +15,7 @@
 			<tr>
 				<td>
 				{{view Ember.TextField valueBinding="newEvent.link" class="input-tiny" id="evLink" placeholder="link"}}
-				{{view Ember.TextField valueBinding="newEvent.name" class="input-small" id="evName" placeholder="nombre del evento"}}
+				{{view Ember.TextField valueBinding="newEvent.name" class="input-small" id="evName" placeholder="event's name"}}
 				</td>
 				
 				<!-- date and time -->
@@ -27,7 +27,7 @@
 					<input type="text" size="5" class="input-tiny" value="{{newEvent.date}}" id="evTimePick" readonly>
 					<span class="add-on"><i class="icon-time"></i></span>
 				</div></td>
-				<td>{{view Ember.TextField valueBinding="newEvent.loc" class="input-medium" id="evLoc" placeholder="lugar"}}</td>
+				<td>{{view Ember.TextField valueBinding="newEvent.loc" class="input-medium" id="evLoc" placeholder="address"}}</td>
 				<td>
 					<div class="btn btn-small" {{action createEvent}}>Add</div>
 					<!--<div class="btn btn-small" {{action createVirtualEvent}}>Virtual</div>-->

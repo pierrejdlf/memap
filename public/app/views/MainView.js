@@ -180,7 +180,7 @@ define([
 		},
 					
 		initMap: function() {	
-			this.m = mapbox.map('map').zoom(14).center({lat:6.240903,lon:-75.570196});
+			this.m = mapbox.map('map').zoom(14).center({lat:48.8593,lon:2.3442});
 			var backLayer = mapbox.layer().id('minut.map-qgm940aa');
 			this.m.addLayer(backLayer);
 			var dimensions = this.m.dimensions;
